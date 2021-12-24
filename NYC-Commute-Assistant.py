@@ -31,7 +31,7 @@ def get_train_times(station_id, api_key) -> list:
 # this function determines the next train sofia can make and the time she would have to leave to make the following 3 trains.
 def sofia_to_work() -> str:
     num_trains = 0
-    time_to_walk = 13 #13 minute walk to subway. @to-do -> add integration with google maps distance api to determine current walk time.
+    time_to_walk = config['WALK_TIME'] #13 minute walk to subway. @to-do -> add integration with google maps distance api to determine current walk time.
     north_bound_arrivals, south_bound_arrivals = get_train_times(config['STOP'], config['API_KEY'])
 
     for each in north_bound_arrivals:
