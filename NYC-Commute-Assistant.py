@@ -40,10 +40,10 @@ def sofia_to_work() -> str:
         datetime_object = datetime_object.replace(year=datetime.now().year, day=datetime.now().day, month=datetime.now().month)
         current_time_obj = datetime.now()
 
-        if current_time_obj.minute + time_to_walk > 59:
+        if current_time_obj.minute + int(time_to_walk) > 59:
             current_time_obj = current_time_obj.replace(hour=current_time_obj.hour+1, minute=(current_time_obj.minute+time_to_walk)-60)
         else:
-            current_time_obj = current_time_obj.replace(minute=(current_time_obj.minute+time_to_walk))
+            current_time_obj = current_time_obj.replace(minute=(current_time_obj.minute+int(time_to_walk)))
 
         if current_time_obj >= datetime_object:
             continue
