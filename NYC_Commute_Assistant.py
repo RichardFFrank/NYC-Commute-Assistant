@@ -28,8 +28,16 @@ def get_train_times(station_id, api_key) -> list:
     
     return(train_times_north, train_times_south)
 
+def generate_string(x):
+    if x < 10:
+        return "0"+str(x)
+    else:
+        return str(x)
+
+
 # this function determines the next train sofia can make and the time she would have to leave to make the following 3 trains.
-def sofia_to_work() -> str:
+def sofia_to_work() -> list:
+    train_times = []
     num_trains = 0
     time_to_walk = config['WALK_TIME'] #13 minute walk to subway. @to-do -> add integration with google maps distance api to determine current walk time.
     north_bound_arrivals, south_bound_arrivals = get_train_times(config['STOP'], config['API_KEY'])
@@ -41,24 +49,26 @@ def sofia_to_work() -> str:
         current_time_obj = datetime.now()
 
         if current_time_obj.minute + int(time_to_walk) > 59:
-            current_time_obj = current_time_obj.replace(hour=current_time_obj.hour+1, minute=(current_time_obj.minute+time_to_walk)-60)
+            current_time_obj = current_time_obj.replace(hour=current_time_obj.hour+1, minute=(current_time_obj.minute+int(time_to_walk))-60)
         else:
             current_time_obj = current_time_obj.replace(minute=(current_time_obj.minute+int(time_to_walk)))
 
         if current_time_obj >= datetime_object:
             continue
         elif num_trains == 0:
-            print("The next available train is at:\n",str(datetime_object.hour)+":"+str(datetime_object.minute))
-            print("After that the next arrivals are at:")
+            train_times.append(generate_string(datetime_object.hour)+":"+generate_string(datetime_object.minute))
+            # print("The next available train is at:\n",str(datetime_object.hour)+":"+str(datetime_object.minute))
+            # print("After that the next arrivals are at:")
             num_trains+=1
         else:
             if num_trains < 4:
-                print(" "+str(datetime_object.hour)+":"+str(datetime_object.minute))
+                train_times.append(generate_string(datetime_object.hour)+":"+generate_string(datetime_object.minute))
+                # print(" "+str(datetime_object.hour)+":"+str(datetime_object.minute))
                 num_trains+=1
             else:
-                break
+                return train_times
 
-while (1):
-    sofia_to_work()
-    print("\n~~~~~~~~~~~~\n")
-    time.sleep(60)
+# while (1):
+#     sofia_to_work()
+#     print("\n~~~~~~~~~~~~\n")
+#     time.sleep(60)
