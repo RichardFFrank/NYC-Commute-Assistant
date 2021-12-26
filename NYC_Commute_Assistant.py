@@ -68,7 +68,33 @@ def sofia_to_work() -> list:
             else:
                 return train_times
 
-# while (1):
-#     sofia_to_work()
-#     print("\n~~~~~~~~~~~~\n")
-#     time.sleep(60)
+def calculate_leave_time(t) -> int:
+    # convert time string to int.
+    time_obj = time.strptime(t,"%H:%M")
+    current_time_obj = datetime.now()
+    time_to_walk = config['WALK_TIME'] #13 minute walk to subway. @to-do -> add integration with google maps distance api to determine current walk time.
+
+    # last minue to leave
+    if time_obj.tm_hour == current_time_obj.hour:
+        last_leave_time = time_obj.tm_min - (current_time_obj.minute + int(time_to_walk))
+    else:
+        last_leave_time = 60 - (time_obj.tm_min + int(time_to_walk))
+        
+    return last_leave_time
+
+
+def cmd_line_display():
+    time_list = sofia_to_work()
+    print("The next available train is at:\n", time_list[0])
+    print("The following three trains arrive at:")
+    for x in range(1,len(time_list)):
+        print(time_list[x])
+    print("You need to leave in the next",str(calculate_leave_time(time_list[0])),"minutes to make the next train.")
+    
+            # print("After that the next arrivals are at:")
+
+
+while (1):
+    cmd_line_display()
+    print("\n~~~~~~~~~~~~\n")
+    time.sleep(60)
