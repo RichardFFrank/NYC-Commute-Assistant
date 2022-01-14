@@ -94,7 +94,9 @@ def cmd_line_display():
             # print("After that the next arrivals are at:")
 
 
-while (1):
-    cmd_line_display()
-    print("\n~~~~~~~~~~~~\n")
-    time.sleep(60)
+
+if __name__ == "__main__":
+    while (1):
+        cmd_line_display()
+        print("\n~~~~~~~~~~~~\n")
+        time.sleep(60)
