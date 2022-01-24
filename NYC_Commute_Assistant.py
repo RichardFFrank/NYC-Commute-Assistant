@@ -35,8 +35,8 @@ def generate_string(x):
         return str(x)
 
 
-# this function determines the next train sofia can make and the time she would have to leave to make the following 3 trains.
-def sofia_to_work() -> list:
+# this function determines the next train the user can make and the time they would have to leave to make the following 3 trains.
+def generate_train_times() -> list:
     train_times = []
     num_trains = 0
     time_to_walk = config['WALK_TIME'] #13 minute walk to subway. @to-do -> add integration with google maps distance api to determine current walk time.
@@ -57,13 +57,10 @@ def sofia_to_work() -> list:
             continue
         elif num_trains == 0:
             train_times.append(generate_string(datetime_object.hour)+":"+generate_string(datetime_object.minute))
-            # print("The next available train is at:\n",str(datetime_object.hour)+":"+str(datetime_object.minute))
-            # print("After that the next arrivals are at:")
             num_trains+=1
         else:
             if num_trains < 4:
                 train_times.append(generate_string(datetime_object.hour)+":"+generate_string(datetime_object.minute))
-                # print(" "+str(datetime_object.hour)+":"+str(datetime_object.minute))
                 num_trains+=1
             else:
                 return train_times
@@ -72,7 +69,7 @@ def calculate_leave_time(t) -> int:
     # convert time string to int.
     time_obj = time.strptime(t,"%H:%M")
     current_time_obj = datetime.now()
-    time_to_walk = config['WALK_TIME'] #13 minute walk to subway. @to-do -> add integration with google maps distance api to determine current walk time.
+    time_to_walk = config['WALK_TIME']
 
     # last minue to leave
     if time_obj.tm_hour == current_time_obj.hour:
@@ -84,15 +81,12 @@ def calculate_leave_time(t) -> int:
 
 
 def cmd_line_display():
-    time_list = sofia_to_work()
+    time_list = calculate_leave_time()
     print("The next available train is at:\n", time_list[0])
     print("The following three trains arrive at:")
     for x in range(1,len(time_list)):
         print(time_list[x])
     print("You need to leave in the next",str(calculate_leave_time(time_list[0])),"minutes to make the next train.")
-    
-            # print("After that the next arrivals are at:")
-
 
 
 if __name__ == "__main__":
